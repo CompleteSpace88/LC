@@ -1,2 +1,1 @@
-# LC
 Mean/Medium/Mode
