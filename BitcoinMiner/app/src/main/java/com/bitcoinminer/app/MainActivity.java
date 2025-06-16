@@ -34,6 +34,14 @@ public class MainActivity extends Activity {
     private DecimalFormat btcFormat;
     private SharedPreferences prefs;
     
+    // Network and Offline Management
+    private NetworkManager networkManager;
+    private OfflineManager offlineManager;
+    private TextView networkStatusText;
+    private TextView offlineStatusText;
+    private Button networkToggleButton;
+    private boolean isOfflineMode = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,8 @@ public class MainActivity extends Activity {
         initializeVariables();
         loadSavedData();
         setupClickListeners();
+        updateNetworkStatus();
+        updateOfflineStatus();
     }
     
     private void initializeViews() {
@@ -53,6 +63,11 @@ public class MainActivity extends Activity {
         startStopButton = findViewById(R.id.start_stop_button);
         withdrawButton = findViewById(R.id.withdraw_button);
         walletAddressInput = findViewById(R.id.wallet_address_input);
+        
+        // Network and offline status views
+        networkStatusText = findViewById(R.id.network_status_text);
+        offlineStatusText = findViewById(R.id.offline_status_text);
+        networkToggleButton = findViewById(R.id.network_toggle_button);
     }
     
     private void initializeVariables() {
@@ -60,6 +75,13 @@ public class MainActivity extends Activity {
         btcFormat = new DecimalFormat("0.00000000");
         miningHandler = new Handler();
         prefs = getSharedPreferences("BitcoinMiner", MODE_PRIVATE);
+        
+        // Initialize network and offline managers
+        networkManager = new NetworkManager(this);
+        offlineManager = new OfflineManager(this);
+        
+        setupNetworkListeners();
+        setupOfflineListeners();
         
         miningRunnable = new Runnable() {
             @Override
@@ -157,6 +179,16 @@ public class MainActivity extends Activity {
                 withdrawBitcoin();
             }
         });
+        
+        // Network toggle button listener
+        if (networkToggleButton != null) {
+            networkToggleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleNetworkMode();
+                }
+            });
+        }
     }
     
     private void startMining() {
@@ -182,10 +214,17 @@ public class MainActivity extends Activity {
         statusText.setText("Status: MINING ACTIVE ✅");
         statusText.setTextColor(0xFF00FF00);
         
-        // Start mining service with validated data
-        Intent serviceIntent = new Intent(this, MiningService.class);
-        serviceIntent.putExtra("wallet_address", CodeValidator.validateIntentData(sanitizedAddress));
-        startService(serviceIntent);
+        // Start appropriate mining mode based on network status
+        if (isOfflineMode || !networkManager.isOnline()) {
+            // Start offline mining
+            offlineManager.startOfflineMining();
+            statusText.setText("Status: OFFLINE MINING ACTIVE 📱");
+        } else {
+            // Start online mining service with validated data
+            Intent serviceIntent = new Intent(this, MiningService.class);
+            serviceIntent.putExtra("wallet_address", CodeValidator.validateIntentData(sanitizedAddress));
+            startService(serviceIntent);
+        }
         
         miningHandler.post(miningRunnable);
         Toast.makeText(this, "✅ Bitcoin mining started with validated address!", Toast.LENGTH_SHORT).show();
@@ -199,9 +238,20 @@ public class MainActivity extends Activity {
         statusText.setTextColor(0xFFFF4444);
         currentHashRate = 0.0;
         
-        // Stop mining service
+        // Stop both online and offline mining
         Intent serviceIntent = new Intent(this, MiningService.class);
         stopService(serviceIntent);
+        
+        if (offlineManager.isOfflineMiningActive()) {
+            offlineManager.stopOfflineMining();
+            
+            // Transfer offline earnings to main balance
+            double offlineBalance = offlineManager.transferOfflineBalance();
+            if (offlineBalance > 0) {
+                currentBalance += offlineBalance;
+                Toast.makeText(this, "💰 Added offline earnings: " + btcFormat.format(offlineBalance) + " BTC", Toast.LENGTH_LONG).show();
+            }
+        }
         
         updateDisplay();
         saveData();
@@ -239,7 +289,7 @@ public class MainActivity extends Activity {
             
         } catch (Exception e) {
             // Error handling to prevent crashes
-            Toast.makeText(this, "⚠️ Mining calculation error - resetting", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "��️ Mining calculation error - resetting", Toast.LENGTH_SHORT).show();
             currentBalance = Math.max(0, currentBalance); // Ensure non-negative
             currentHashRate = 0.0;
             updateDisplay();
@@ -318,11 +368,244 @@ public class MainActivity extends Activity {
         }
     }
     
+    /**
+     * Setup network state listeners
+     */
+    private void setupNetworkListeners() {
+        networkManager.addNetworkStateListener(new NetworkManager.NetworkStateListener() {
+            @Override
+            public void onNetworkStateChanged(boolean isOnline, NetworkManager.NetworkType networkType) {
+                runOnUiThread(() -> {
+                    handleNetworkStateChange(isOnline, networkType);
+                });
+            }
+            
+            @Override
+            public void onConnectionQualityChanged(NetworkManager.ConnectionQuality quality) {
+                runOnUiThread(() -> {
+                    updateConnectionQuality(quality);
+                });
+            }
+            
+            @Override
+            public void onNetworkError(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "🌐 Network: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+    
+    /**
+     * Setup offline state listeners
+     */
+    private void setupOfflineListeners() {
+        offlineManager.addOfflineStateListener(new OfflineManager.OfflineStateListener() {
+            @Override
+            public void onOfflineMiningStateChanged(boolean isActive) {
+                runOnUiThread(() -> {
+                    updateOfflineStatus();
+                });
+            }
+            
+            @Override
+            public void onOfflineBalanceUpdated(double balance) {
+                runOnUiThread(() -> {
+                    updateOfflineStatus();
+                });
+            }
+            
+            @Override
+            public void onOfflineOperationQueued(OfflineManager.OfflineOperation operation) {
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "📋 Operation queued: " + operation.type, Toast.LENGTH_SHORT).show();
+                });
+            }
+            
+            @Override
+            public void onOfflineDataSynced(int operationCount) {
+                runOnUiThread(() -> {
+                    if (operationCount > 0) {
+                        Toast.makeText(MainActivity.this, "🔄 Synced " + operationCount + " offline operations", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+    
+    /**
+     * Handle network state changes
+     */
+    private void handleNetworkStateChange(boolean isOnline, NetworkManager.NetworkType networkType) {
+        if (isOnline && isOfflineMode) {
+            // Connection restored - sync offline data
+            offlineManager.syncOfflineData();
+            
+            // Transfer offline balance to main balance
+            double offlineBalance = offlineManager.transferOfflineBalance();
+            if (offlineBalance > 0) {
+                currentBalance += offlineBalance;
+                updateDisplay();
+                saveData();
+                Toast.makeText(this, "💰 Added offline earnings: " + btcFormat.format(offlineBalance) + " BTC", Toast.LENGTH_LONG).show();
+            }
+            
+            isOfflineMode = false;
+        } else if (!isOnline && !isOfflineMode) {
+            // Connection lost - switch to offline mode
+            isOfflineMode = true;
+            if (isMining) {
+                offlineManager.startOfflineMining();
+            }
+            Toast.makeText(this, "📱 Switched to offline mining mode", Toast.LENGTH_SHORT).show();
+        }
+        
+        updateNetworkStatus();
+    }
+    
+    /**
+     * Update connection quality display
+     */
+    private void updateConnectionQuality(NetworkManager.ConnectionQuality quality) {
+        // Update UI based on connection quality
+        String qualityText = "";
+        switch (quality) {
+            case EXCELLENT:
+                qualityText = "📶 Excellent";
+                break;
+            case GOOD:
+                qualityText = "📶 Good";
+                break;
+            case FAIR:
+                qualityText = "📶 Fair";
+                break;
+            case POOR:
+                qualityText = "📶 Poor";
+                break;
+            case NO_CONNECTION:
+                qualityText = "📶 No Connection";
+                break;
+        }
+        
+        if (networkStatusText != null) {
+            String currentText = networkStatusText.getText().toString();
+            if (currentText.contains("📶")) {
+                // Replace quality part
+                String[] parts = currentText.split("📶");
+                if (parts.length > 0) {
+                    networkStatusText.setText(parts[0] + qualityText);
+                }
+            } else {
+                networkStatusText.setText(currentText + " " + qualityText);
+            }
+        }
+    }
+    
+    /**
+     * Update network status display
+     */
+    private void updateNetworkStatus() {
+        if (networkStatusText == null) return;
+        
+        NetworkManager.NetworkStatus status = networkManager.getNetworkStatus();
+        String statusText = "";
+        
+        if (status.isOnline) {
+            switch (status.networkType) {
+                case WIFI:
+                    statusText = "🌐 WiFi Connected";
+                    break;
+                case MOBILE:
+                    statusText = "🌐 Mobile Data";
+                    break;
+                case ETHERNET:
+                    statusText = "🌐 Ethernet";
+                    break;
+                case VPN:
+                    statusText = "🌐 VPN Connected";
+                    break;
+                default:
+                    statusText = "🌐 Online";
+                    break;
+            }
+        } else {
+            statusText = "🌐 Offline";
+            if (status.reconnectionAttempts > 0) {
+                statusText += " (Retry #" + status.reconnectionAttempts + ")";
+            }
+        }
+        
+        networkStatusText.setText(statusText);
+        
+        // Update network toggle button
+        if (networkToggleButton != null) {
+            if (isOfflineMode) {
+                networkToggleButton.setText("🔄 Reconnect");
+                networkToggleButton.setBackgroundColor(0xFFFF9800); // Orange
+            } else {
+                networkToggleButton.setText("📱 Offline Mode");
+                networkToggleButton.setBackgroundColor(0xFF2196F3); // Blue
+            }
+        }
+    }
+    
+    /**
+     * Update offline status display
+     */
+    private void updateOfflineStatus() {
+        if (offlineStatusText == null) return;
+        
+        OfflineManager.OfflineStatus status = offlineManager.getOfflineStatus();
+        String statusText = "";
+        
+        if (status.isActive) {
+            long durationMinutes = status.duration / (1000 * 60);
+            statusText = String.format("📱 Offline Mining: %.8f BTC (%dm)", status.balance, durationMinutes);
+        } else if (status.balance > 0) {
+            statusText = String.format("📱 Offline Earnings: %.8f BTC", status.balance);
+        } else {
+            statusText = "📱 Offline Mode Ready";
+        }
+        
+        if (status.pendingOperations > 0) {
+            statusText += " (" + status.pendingOperations + " pending)";
+        }
+        
+        offlineStatusText.setText(statusText);
+    }
+    
+    /**
+     * Toggle between online and offline modes
+     */
+    private void toggleNetworkMode() {
+        if (isOfflineMode) {
+            // Try to reconnect
+            networkManager.attemptReconnection();
+            Toast.makeText(this, "🔄 Attempting to reconnect...", Toast.LENGTH_SHORT).show();
+        } else {
+            // Switch to offline mode manually
+            isOfflineMode = true;
+            if (isMining) {
+                offlineManager.startOfflineMining();
+            }
+            Toast.makeText(this, "📱 Switched to offline mode", Toast.LENGTH_SHORT).show();
+            updateNetworkStatus();
+        }
+    }
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (isMining) {
             stopMining();
+        }
+        
+        // Clean up managers
+        if (networkManager != null) {
+            networkManager.destroy();
+        }
+        if (offlineManager != null) {
+            offlineManager.destroy();
         }
     }
     

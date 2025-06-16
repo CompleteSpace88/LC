@@ -58,7 +58,47 @@
         android:textColor="#FFFF00"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="8dp" />
+    
+    <!-- Network Status Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
+        
+        <TextView
+            android:id="@+id/network_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🌐 Checking Network..."
+            android:textSize="14sp"
+            android:textColor="#00FF00"
+            android:gravity="center"
+            android:layout_marginBottom="4dp" />
+        
+        <TextView
+            android:id="@+id/offline_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📱 Offline Mode Ready"
+            android:textSize="14sp"
+            android:textColor="#FFD700"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+        
+        <Button
+            android:id="@+id/network_toggle_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="📱 Offline Mode"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="#2196F3" />
+            
+    </LinearLayout>
 
     <!-- Mining Progress -->
     <ProgressBar
@@ -125,4 +165,3 @@
         android:lineSpacingExtra="4dp" />
 
 </LinearLayout>
-
