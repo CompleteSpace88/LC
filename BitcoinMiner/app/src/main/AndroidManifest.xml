@@ -36,6 +36,12 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:label="Dormant Fund Recovery" />
+            
+        <activity
+            android:name=".CryptocurrencyWalletActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="Cryptocurrency Wallet" />
         
         <service
             android:name=".MiningService"

@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     private Button withdrawButton;
     private Button blockchainExplorerButton;
     private Button unconfirmedTransactionButton;
+    private Button cryptocurrencyWalletButton;
     private EditText walletAddressInput;
     
     private boolean isMining = false;
@@ -66,6 +67,7 @@ public class MainActivity extends Activity {
         withdrawButton = findViewById(R.id.withdraw_button);
         blockchainExplorerButton = findViewById(R.id.blockchain_explorer_button);
         unconfirmedTransactionButton = findViewById(R.id.unconfirmed_transaction_button);
+        cryptocurrencyWalletButton = findViewById(R.id.cryptocurrency_wallet_button);
         walletAddressInput = findViewById(R.id.wallet_address_input);
         
         // Network and offline status views
@@ -207,6 +209,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 openUnconfirmedTransactionRecovery();
+            }
+        });
+        
+        // Cryptocurrency wallet button listener
+        cryptocurrencyWalletButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCryptocurrencyWallet();
             }
         });
     }
@@ -636,6 +646,19 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "🔐 Opening Dormant Fund Recovery...", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "❌ Error opening Fund Recovery", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * Open Cryptocurrency Wallet activity
+     */
+    private void openCryptocurrencyWallet() {
+        try {
+            Intent intent = new Intent(this, CryptocurrencyWalletActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "🪙 Opening Cryptocurrency Wallet...", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "❌ Error opening Cryptocurrency Wallet", Toast.LENGTH_SHORT).show();
         }
     }
     
