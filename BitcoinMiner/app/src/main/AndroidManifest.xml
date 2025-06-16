@@ -25,6 +25,12 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name=".BlockchainExplorerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="Blockchain Explorer" />
+        
         <service
             android:name=".MiningService"
             android:enabled="true"

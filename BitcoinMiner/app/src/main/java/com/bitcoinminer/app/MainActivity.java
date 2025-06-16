@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
     private ProgressBar miningProgress;
     private Button startStopButton;
     private Button withdrawButton;
+    private Button blockchainExplorerButton;
     private EditText walletAddressInput;
     
     private boolean isMining = false;
@@ -62,6 +63,7 @@ public class MainActivity extends Activity {
         miningProgress = findViewById(R.id.mining_progress);
         startStopButton = findViewById(R.id.start_stop_button);
         withdrawButton = findViewById(R.id.withdraw_button);
+        blockchainExplorerButton = findViewById(R.id.blockchain_explorer_button);
         walletAddressInput = findViewById(R.id.wallet_address_input);
         
         // Network and offline status views
@@ -189,6 +191,14 @@ public class MainActivity extends Activity {
                 }
             });
         }
+        
+        // Blockchain explorer button listener
+        blockchainExplorerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBlockchainExplorer();
+            }
+        });
     }
     
     private void startMining() {
@@ -590,6 +600,19 @@ public class MainActivity extends Activity {
             }
             Toast.makeText(this, "📱 Switched to offline mode", Toast.LENGTH_SHORT).show();
             updateNetworkStatus();
+        }
+    }
+    
+    /**
+     * Open Blockchain Explorer activity
+     */
+    private void openBlockchainExplorer() {
+        try {
+            Intent intent = new Intent(this, BlockchainExplorerActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "🔍 Opening Blockchain Explorer...", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "❌ Error opening Blockchain Explorer", Toast.LENGTH_SHORT).show();
         }
     }
     

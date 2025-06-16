@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#1a1a1a">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔍 BLOCKCHAIN EXPLORER 🔍"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#FFD700"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Current Price Display -->
+    <TextView
+        android:id="@+id/current_price_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="💰 Loading Bitcoin Price..."
+        android:textSize="16sp"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="visible" />
+
+    <!-- Search Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search Bitcoin Address, Transaction Hash, or Block:"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter address, txid, or block hash/height"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:background="#1a1a1a"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:inputType="text"
+            android:maxLines="3" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="🔍 SEARCH BLOCKCHAIN"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#2196F3" />
+
+    </LinearLayout>
+
+    <!-- Quick Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/price_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="💰 Price"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="#4CAF50"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/network_stats_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="📊 Network"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="#FF9800"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+    <!-- Loading Progress -->
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:progressTint="#FFD700" />
+
+    <!-- Results Section -->
+    <ScrollView
+        android:id="@+id/results_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:background="#2d2d2d"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/results_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+    <!-- Instructions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔍 Search Examples:\n• Bitcoin Address: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa\n• Transaction: 64-character hex string\n• Block Hash: 64-character hex string\n• Block Height: Number (e.g., 700000)\n\n💡 Tap results to copy data to clipboard"
+        android:textSize="11sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible" />
+
+</LinearLayout>
+
