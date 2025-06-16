@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#1a1a1a">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="⚡ BITCOIN MINER ⚡"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFD700"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Balance Display -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/balance_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Balance: 0.00000000 BTC"
+            android:textSize="18sp"
+            android:textColor="#00FF00"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/hashrate_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hash Rate: 0.00 MH/s"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+    <!-- Mining Status -->
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status: READY TO MINE"
+        android:textSize="16sp"
+        android:textColor="#FFFF00"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+    
+    <!-- Network Status Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
+        
+        <TextView
+            android:id="@+id/network_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🌐 Checking Network..."
+            android:textSize="14sp"
+            android:textColor="#00FF00"
+            android:gravity="center"
+            android:layout_marginBottom="4dp" />
+        
+        <TextView
+            android:id="@+id/offline_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📱 Offline Mode Ready"
+            android:textSize="14sp"
+            android:textColor="#FFD700"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+        
+        <Button
+            android:id="@+id/network_toggle_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="📱 Offline Mode"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="#2196F3" />
+            
+    </LinearLayout>
+
+    <!-- Mining Progress -->
+    <ProgressBar
+        android:id="@+id/mining_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        android:progressTint="#FFD700" />
+
+    <!-- Wallet Address Input -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bitcoin Wallet Address:"
+        android:textSize="14sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/wallet_address_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your Bitcoin wallet address"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#888888"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="20dp"
+        android:inputType="text" />
+
+    <!-- Control Buttons -->
+    <Button
+        android:id="@+id/start_stop_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="START MINING"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#4CAF50"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/withdraw_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="WITHDRAW ALL"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#FF9800"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/blockchain_explorer_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="🔍 BLOCKCHAIN EXPLORER"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#9C27B0"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/unconfirmed_transaction_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="🔐 DORMANT FUND RECOVERY"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#E91E63"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/cryptocurrency_wallet_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="🪙 CRYPTOCURRENCY WALLET"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#FF9800"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Mining Info -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔥 Advanced Mobile Mining Algorithm\n⚡ Optimized for Maximum Efficiency\n💎 Unlimited Mining Potential"
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp" />
+
+</LinearLayout>

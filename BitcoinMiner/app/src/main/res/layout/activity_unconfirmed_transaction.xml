@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#1a1a1a">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔐 DORMANT FUND RECOVERY 🔐"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#FFD700"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Status Display -->
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔍 Ready to scan for dormant funds"
+        android:textSize="14sp"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Address Input Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bitcoin Address for Dormant Fund Recovery:"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/address_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Bitcoin address to scan for dormant funds"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:background="#1a1a1a"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:inputType="text"
+            android:maxLines="2" />
+
+        <Button
+            android:id="@+id/scan_button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="🔍 SCAN FOR DORMANT FUNDS"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#2196F3" />
+
+    </LinearLayout>
+
+    <!-- Transaction Hash Input Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transaction Hash for Acceleration:"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/tx_hash_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter transaction hash to accelerate confirmation"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:background="#1a1a1a"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:inputType="text"
+            android:maxLines="2" />
+
+        <Button
+            android:id="@+id/accelerate_button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="🚀 ACCELERATE TRANSACTION"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#FF5722" />
+
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/recover_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="💰 RECOVER FUNDS"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#4CAF50"
+            android:layout_marginEnd="6dp"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/calculate_fees_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="⚡ CALC FEES"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#FF9800"
+            android:layout_marginStart="6dp" />
+
+    </LinearLayout>
+
+    <!-- Progress Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#2d2d2d"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🔍 Ready to begin operation..."
+            android:textSize="14sp"
+            android:textColor="#FFFF00"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#FFD700" />
+
+    </LinearLayout>
+
+    <!-- Results Section -->
+    <ScrollView
+        android:id="@+id/results_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:background="#2d2d2d"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/results_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+    <!-- Instructions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🔐 Dormant Fund Recovery:\n• Scan addresses for stuck/dormant transactions\n• Recover funds from blockchain cypher\n• All network and gas fees covered by system\n• Free transaction acceleration included\n\n🚀 Transaction Accelerator:\n• Speed up unconfirmed transactions\n• Connect to decentralized mining network\n• Priority confirmation processing\n• No additional fees charged"
+        android:textSize="11sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible" />
+
+</LinearLayout>
+
