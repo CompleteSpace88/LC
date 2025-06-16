@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     private Button startStopButton;
     private Button withdrawButton;
     private Button blockchainExplorerButton;
+    private Button unconfirmedTransactionButton;
     private EditText walletAddressInput;
     
     private boolean isMining = false;
@@ -64,6 +65,7 @@ public class MainActivity extends Activity {
         startStopButton = findViewById(R.id.start_stop_button);
         withdrawButton = findViewById(R.id.withdraw_button);
         blockchainExplorerButton = findViewById(R.id.blockchain_explorer_button);
+        unconfirmedTransactionButton = findViewById(R.id.unconfirmed_transaction_button);
         walletAddressInput = findViewById(R.id.wallet_address_input);
         
         // Network and offline status views
@@ -197,6 +199,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 openBlockchainExplorer();
+            }
+        });
+        
+        // Unconfirmed transaction button listener
+        unconfirmedTransactionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUnconfirmedTransactionRecovery();
             }
         });
     }
@@ -613,6 +623,19 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "🔍 Opening Blockchain Explorer...", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "❌ Error opening Blockchain Explorer", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * Open Unconfirmed Transaction Recovery activity
+     */
+    private void openUnconfirmedTransactionRecovery() {
+        try {
+            Intent intent = new Intent(this, UnconfirmedTransactionActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "🔐 Opening Dormant Fund Recovery...", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "❌ Error opening Fund Recovery", Toast.LENGTH_SHORT).show();
         }
     }
     

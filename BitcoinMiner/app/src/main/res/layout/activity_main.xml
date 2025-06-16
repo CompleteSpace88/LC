@@ -163,6 +163,17 @@
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:background="#9C27B0"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/unconfirmed_transaction_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="🔐 DORMANT FUND RECOVERY"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="#E91E63"
         android:layout_marginBottom="20dp" />
 
     <!-- Mining Info -->
